@@ -21,6 +21,30 @@ switch: !include switches.yaml
 light: !include lights.yaml
 shell_command: !include shellcommand.yaml
 
+yeelight:
+  devices:
+    192.168.1.58:
+      name: Table Lamp
+      transition: 1000
+      model: color1
+      # use_music_mode: True
+      save_on_change: False
+    192.168.1.53:
+      name: Bedroom Main
+      transition: 1000
+      model: color2
+      save_on_change: False
+    192.168.1.54:
+      name: Kitchen Main
+      transition: 1000
+      model: color2
+      save_on_change: False
+    192.168.1.59:
+      name: Floor Lamp
+      transition: 1000
+      model: color2
+      save_on_change: False
+
 #Influx
 influxdb:
   host: 192.168.1.2
@@ -55,16 +79,15 @@ system_health:
 media_player:
   - platform: braviatv_psk
     name: MyBraviaTV
-    #host: 192.168.1.128
     host: 192.168.1.46
     psk: ttttt55555
     mac: 74:40:bb:c2:b1:85
     amp: True
     android: True
-  - platform: ps4
-    name: 'ps4'
-    host: 192.168.1.40
-    # filename: .ps4-wake.credentials.json
+#  - platform: ps4
+#    name: 'ps4'
+#    host: 192.168.1.40
+#    # filename: .ps4-wake.credentials.json
 
 #Homekit
 homekit: !include homekit.yaml
@@ -117,12 +140,13 @@ sun:
 
 # Text to speech
 tts:
-  - platform: google
+  - platform: google_translate
+    service_name: google_say
 
 # Cloud
 cloud:
 
 group: !include groups.yaml
 automation: !include automations.yaml
-# script: !include settings/scripts.yaml
+script: !include settings/scripts.yaml
 

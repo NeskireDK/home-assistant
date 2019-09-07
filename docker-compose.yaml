@@ -50,16 +50,6 @@ services:
       timeout: 10s
       retries: 6
   
-  hass-configurator:
-    image: "causticlab/hass-configurator-docker:arm"
-    restart: always
-    ports:
-      - "3218:3218/tcp"
-    network_mode: "host"
-    volumes:
-      - /opt/hass-configurator/config:/config
-      - /opt/homeassistant:/hass-config
-
   node-red:
     container_name: node-red
     image: nodered/node-red-docker:rpi-v8
@@ -90,19 +80,6 @@ services:
       - "traefik.docker.network=proxy"
       - "traefik.frontend.headers.frameDeny=true"
       - "traefik.frontend.headers.customFrameOptionsValue=ALLOW-FROM https://${DOMAINNAME}"
-
-
-#  mosquitto:
-#    container_name: mosquitto
-#    image: eclipse-mosquitto
-#    user: "1000:1000"
-#    ports:
-#      - 1883:1883
-#    volumes:
-#      - /etc/localtime:/etc/localtime:ro
-#      - /opt/mosquitto:/mosquitto/config:ro
-#      - /opt/mosquitto:/mosquitto/data
-#    restart: on-failure
 
   portainer:
     container_name: portainer
