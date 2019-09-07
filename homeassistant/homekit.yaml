@@ -1,14 +1,33 @@
 filter:
   exclude_domains:
+    - device_tracker
+    - binary_sensor
+    - switch
 
-entity_config:
-  media_player.mybraviatv:
-    name: TV
-    feature_list:
-      - feature: on_off
-#      - feature: toggle_mute
-  media_player.ps4:
-    name: "Playstation"
-    feature_list:
-      - feature: on_off
-      - feature: play_stop
+  include_domains:
+    - light
+    - media_player
+    - script
+    - sensor
+
+  include_entities:
+    - switch.third_plug_relay
+    - switch.fourth_plug_relay
+    - switch.kitchen_plug_relay
+    - switch.tv_plug_relay
+    - binary_sensor.motion_sensor_158d000234bd1b
+#  exclude_entities:
+#    - media_player.playstation_4
+#    - media_player.mybraviatv
+    
+
+#entity_config:
+#  media_player.mybraviatv:
+#    name: TV
+#    feature_list:
+#      - feature: on_off
+#  media_player.ps4:
+#    name: "Playstation"
+#    feature_list:
+#      - feature: on_off
+#      - feature: play_stop
