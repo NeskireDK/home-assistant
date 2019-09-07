@@ -1,0 +1,29 @@
+binary_sensor.switch_158d0002109f51:
+  friendly_name: Bedtable
+binary_sensor.switch_158d0001ef6732:
+  friendly_name: Main
+binary_sensor.switch_158d0001e7934b:
+  friendly_name: Bathroom
+sensor.pressure_158d00023891bc:
+  friendly_name: Bathroom Pressure
+sensor.humidity_158d00023891bc:
+  friendly_name: Bathroom Humidity
+sensor.temperature_158d00023891bc:
+  friendly_name: Bathroom Temperature
+sensor.temperature_158d00022ed024:
+  friendly_name: Bedroom Temperature
+sensor.humidity_158d00022ed024:
+  friendly_name: Bedroom Humidity
+sensor.temperature_158d000238fc84:
+  friendly_name: Kitchen Temperature
+sensor.humidity_158d000238fc84:
+  friendly_name: Kitchen Humidity
+sensor.pressure_158d000238fc84:
+  friendly_name: Kitchen Pressure
+sensor.illumination_7811dcf984c9:
+  friendly_name: Kitchen Illumination
+light.gateway_light_7811dcf984c9:
+  friendly_name: Kitchen Night Light
+media_player.mybraviatv:
+  friendly_name: TV
+  volume_level: 0.91

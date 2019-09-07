@@ -1,0 +1,5 @@
+#sensors
+
+# Weather prediction
+  - platform: yr
+

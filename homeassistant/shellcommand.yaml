@@ -1,0 +1,2 @@
+  mediacenter: '/usr/bin/curl -X GET "http://192.168.1.223:7760/suspend"'
+  node_red_restart: curl http://127.0.0.1:8126/container/node-red/restart

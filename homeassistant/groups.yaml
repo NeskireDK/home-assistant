@@ -1,0 +1,5 @@
+pc:
+  name: PC
+  entities:
+   - switch.mediacenter
+   - binary_sensor.tv_plug_button

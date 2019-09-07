@@ -1,0 +1,177 @@
+version: "2.1"
+services:
+  grafana:
+    container_name: grafana
+    image: proxx/grafana-armv7
+    user: "1000"
+    ports:
+      - 3000:3000
+    volumes:
+      - /opt/grafana:/etc/grafana:rw
+      - /opt/grafana:/var/lib/grafana:rw
+      - /etc/timezone:/etc/timezone:ro
+    restart: on-failure
+    depends_on:
+      influxdb:
+        condition: service_healthy
+
+  influxdb:
+    container_name: influxdb
+    image: influxdb
+    ports:
+      - 8086:8086
+    volumes:
+      - /opt/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - /opt/influxdb:/var/lib/influxdb
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-sI", "http://127.0.0.1:8086/ping"]
+      interval: 30s
+      timeout: 1s
+      retries: 24
+      
+  homeassistant:
+    container_name: homeassistant
+    image: homeassistant/raspberrypi3-homeassistant
+    network_mode: "host"
+    volumes:
+      - /opt/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    restart: on-failure
+    depends_on:
+      influxdb:
+        condition: service_healthy
+      #mosquitto:
+      #  condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8123"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+  
+  hass-configurator:
+    image: "causticlab/hass-configurator-docker:arm"
+    restart: always
+    ports:
+      - "3218:3218/tcp"
+    network_mode: "host"
+    volumes:
+      - /opt/hass-configurator/config:/config
+      - /opt/homeassistant:/hass-config
+
+  node-red:
+    container_name: node-red
+    image: nodered/node-red-docker:rpi-v8
+    ports:
+      - 1880:1880
+    volumes:
+      - /opt/node-red:/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: "no" # because the exit code(s) are wrong
+    depends_on:
+      #mosquitto:
+      #  condition: service_started
+      homeassistant:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:1880"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=node-red"
+      - "traefik.frontend.rule=Host:nodered.${DOMAINNAME}"
+      - "traefik.port=1880"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.frameDeny=true"
+      - "traefik.frontend.headers.customFrameOptionsValue=ALLOW-FROM https://${DOMAINNAME}"
+
+
+#  mosquitto:
+#    container_name: mosquitto
+#    image: eclipse-mosquitto
+#    user: "1000:1000"
+#    ports:
+#      - 1883:1883
+#    volumes:
+#      - /etc/localtime:/etc/localtime:ro
+#      - /opt/mosquitto:/mosquitto/config:ro
+#      - /opt/mosquitto:/mosquitto/data
+#    restart: on-failure
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    ports:
+      - 9000:9000
+    volumes:
+      - /opt/portainer:/data:rw
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: "no" # because the exit code(s) are wrong
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend=portainer"
+      - "traefik.frontend.rule=Host:portainer.${DOMAINNAME}"  
+#      - "traefik.frontend.rule=Host:${DOMAINNAME}; PathPrefixStrip: /portainer"
+      - "traefik.port=9000"
+      - "traefik.docker.network=proxy"
+      - "traefik.frontend.headers.SSLRedirect=true"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
+      - "traefik.frontend.headers.frameDeny=true"
+      - "traefik.frontend.headers.customFrameOptionsValue=ALLOW-FROM https://${DOMAINNAME}"
+
+  organizr:
+    container_name: organizr
+    image: organizrtools/organizr-v2:armhf
+    ports:
+      - 81:80
+      - 4430:443
+    volumes:
+      - /opt/organizr:/config:rw
+    environment:
+      - PGID=1000
+      - PUID=1000
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:${DOMAINNAME}"
+      - "traefik.docker.network=proxy"
+      - "traefik.backend=organizrv2"
+      - "traefik.port=80"
+      - "traefik.frontend.headers.frameDeny=true"
+      - "traefik.frontend.headers.customFrameOptionsValue=ALLOW-FROM https://${DOMAINNAME}"
+  dockermon:
+    container_name: dockermon
+    image: tribunex/ha-dockermon-pi
+    ports:
+      - 8126:8126
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/dockermon:/config
+    restart: on-failure
+
+networks:
+  proxy:
+    external:
+      name: traefik_proxy
+  default:
+    driver: bridge
