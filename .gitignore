@@ -7,7 +7,7 @@
 !.gitignore
 !*.md
 !homeassistant
-
+!homeassistant/settings
 # Ignore folders.
 .storage
 .cloud
