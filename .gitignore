@@ -8,6 +8,8 @@
 !*.md
 !homeassistant
 !homeassistant/
+!influxdb/
+
 # Ignore folders.
 .storage
 .cloud

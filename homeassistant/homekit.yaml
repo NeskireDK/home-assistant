@@ -1,7 +1,7 @@
 filter:
   exclude_domains:
     - device_tracker
-    - binary_sensor
+#    - binary_sensor
     - switch
 
   include_domains:
@@ -15,8 +15,14 @@ filter:
     - switch.fourth_plug_relay
     - switch.kitchen_plug_relay
     - switch.tv_plug_relay
+    - switch.pc
     - binary_sensor.motion_sensor_158d000234bd1b
+    - sensor.tv_plug_wattage
+    - sensor.tv_plug_total_daily_energy
+    - sensor.pressure_158d00023891bc
 #  exclude_entities:
+#    - light.bedroom_main
+#    - light.floor_lamp 
 #    - media_player.playstation_4
 #    - media_player.mybraviatv
     
