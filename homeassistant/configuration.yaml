@@ -1,0 +1,122 @@
+homeassistant:
+  auth_providers:
+    - type: homeassistant
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: 55.640669
+  longitude: 12.074685
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 0
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Copenhagen
+  # Customization file
+  customize: !include customize.yaml
+
+# Includes
+sensor: !include sensors.yaml
+switch: !include switches.yaml
+light: !include lights.yaml
+shell_command: !include shellcommand.yaml
+
+#Influx
+influxdb:
+  host: 192.168.1.2
+  port: 8086
+  username: neskire  
+  password: Lammer5450
+  database: homeassistant
+  default_measurement: state
+# exclude stuff that is pointless to log
+  exclude: 
+    domains:
+      - group 
+    entities:
+      - sensor.other_junk_you_dont_care_about
+
+system_health:
+
+# hass-configurator
+# panel_iframe:
+#   configurator:
+#     title: Configurator
+#     icon: mdi:wrench
+#     url: http://127.0.0.1:3218
+
+
+# Sony 
+media_player:
+  - platform: braviatv_psk
+    name: MyBraviaTV
+    host: 192.168.1.128
+    psk: ttttt55555
+    mac: 74:40:bb:c2:b1:85
+    amp: True
+    android: True
+  - platform: ps4
+    name: 'ps4'
+    host: 192.168.1.40
+    # filename: .ps4-wake.credentials.json
+
+#Homekit
+homekit: !include homekit.yaml
+
+# Gateway
+xiaomi_aqara:
+  discovery_retry: 5
+  gateways:
+    - key: 79230447A6024F76
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+# # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: 192.168.1.57:8123
+#   api_password: myPass13
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+  ignore:
+    - yeelight
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+group: !include groups.yaml
+automation: !include automations.yaml
+# script: !include settings/scripts.yaml
+

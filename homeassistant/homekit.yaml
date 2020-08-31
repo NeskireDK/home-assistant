@@ -1,0 +1,14 @@
+filter:
+  exclude_domains:
+
+entity_config:
+  media_player.mybraviatv:
+    name: TV
+    feature_list:
+      - feature: on_off
+      - feature: toggle_mute
+  media_player.ps4:
+    name: "Playstation"
+    feature_list:
+      - feature: on_off
+      - feature: play_stop

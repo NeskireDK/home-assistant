@@ -1,0 +1,25 @@
+#sensors
+
+# Weather prediction
+  - platform: yr
+
+
+# tautulli
+
+#  - platform: tautulli
+#    host: 192.168.1.35
+#    ssl: false
+#    verify_ssl: false
+#    api_key: 'd686be28d43b4cc2b2abb2c8d24a103a'
+
+#  - platform: tautulli
+#    host: ariksen.dk:8181/plexpy
+#    ssl: false
+#    verify_ssl: false
+#    api_key: '2c561973d72e252b8680a6855568f742'
+#    monitored_conditions:
+#      - stream_count
+#      - stream_count_transcode
+#      - stream_count_direct_play
+#      - stream_count_direct_stream
+#      - total_bandwidth
